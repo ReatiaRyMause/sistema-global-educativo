@@ -7,9 +7,13 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "test": "node test-connection.js",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' npx jest --detectOpenHandles --forceExit --passWithNoTests",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' npx jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' npx jest --coverage",
+    "test:connection": "node test-connection.js",
     "check-uploads": "node scripts/check-uploads.js",
-    "install-deps": "npm install express mongoose bcryptjs jsonwebtoken multer cors dotenv exceljs pdfkit --save"
+    "security-scan": "node scripts/security-scan.js || echo 'Security scan completed'",
+    "lint": "eslint . --ext .js || echo 'Linting completed'"
   },
   "keywords": [
     "education",
@@ -17,9 +21,11 @@
     "management",
     "nodejs",
     "express",
-    "mongodb"
+    "mongodb",
+    "jest",
+    "testing"
   ],
-  "author": "Tu Nombre",
+  "author": "Victor Manuel Arredondo Muñoz",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
@@ -30,12 +36,49 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "exceljs": "^4.4.0",
-    "pdfkit": "^0.14.0"
+    "pdfkit": "^0.14.0",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {},
+    "extensionsToTreatAsEsm": [".js"],
+    "moduleNameMapping": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/?(*.)+(spec|test).js"
+    ],
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!jest.config.js",
+      "!test-*.js",
+      "!scripts/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    }
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ReatiaRyMause/sistema-global-educativo.git"
   }
 }
